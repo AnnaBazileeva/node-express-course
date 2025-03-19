@@ -2,4 +2,3 @@
 /content/big.txt
 answers/temporary/*
 !answers/temporary/.keep
-.env
