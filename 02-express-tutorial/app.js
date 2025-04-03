@@ -3,6 +3,7 @@ const { products } = require("./data");
 const app = express();
 
 app.use(express.static("./public/"));
+
 app.get("/api/v1/test", (req, res) => {
     res.json({ message: "It worked!" });
 });
