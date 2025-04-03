@@ -8,7 +8,7 @@ const stream = createReadStream('../content/big.txt', {highWaterMark: 200, encod
 let chunkCounter = 0;
 
 stream.on('data', (chunk) => {
-    chunkCounter++;
+    chunkCounter+=1;
     console.log(`chunk ${chunkCounter}`)
     console.log(chunk)
 })
