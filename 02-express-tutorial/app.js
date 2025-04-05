@@ -12,7 +12,7 @@ app.get("/api/v1/products", (req, res) => {
     res.json( products);
 });
 
-app.get("/api/v1/products/:productID", (req, res) => {
+app.get('/api/v1/products/:productID', (req, res) => {
     const idToFind = parseInt(req.params.productID);
 
     if(isNaN(idToFind)) {
@@ -28,8 +28,10 @@ app.get("/api/v1/products/:productID", (req, res) => {
     return res.json(product);
 });
 
-app.get("/api/v1/query", (req, res) => {
+
+app.get('/api/v1/query', (req, res) => {
     const {search, limit, maxPrice, minPrice} = req.query
+
     let results = [...products]
 
     if(search) {
