@@ -14,6 +14,10 @@ app.get("/api/v1/products", (req, res) => {
 
 app.get("/api/v1/products/:productID", (req, res) => {
     const idToFind = parseInt(req.params.productID);
+
+    if(isNaN(idToFind)) {
+        return res.status(400).json({error: "Product ID should be a number"})
+    }
     const product = products.find((p) => p.id === idToFind);
 
 
@@ -21,16 +25,16 @@ app.get("/api/v1/products/:productID", (req, res) => {
         return res.status(404).json({ error: "Product not found" });
     }
 
-    res.json(product);
+    return res.json(product);
 });
 
 app.get("/api/v1/query", (req, res) => {
-    const {search, limit, price, maxPrice, minPrice} = req.query
+    const {search, limit, maxPrice, minPrice} = req.query
     let results = [...products]
 
     if(search) {
         results = results.filter(product => {
-            return product.name.toLowerCase().includes(search)
+            return product.name.toLowerCase().includes(search.toLowerCase());
         })
     }
 
@@ -39,7 +43,7 @@ app.get("/api/v1/query", (req, res) => {
         if (!isNaN(price)) {
             results = results.filter(product => product.price <= price);
         } else {
-            return res.status(400).json({ error: "Invalid price value" });
+            return res.status(400).json({ error: "Invalid maxPrice value" });
         }
     }
     if (minPrice) {
@@ -47,7 +51,7 @@ app.get("/api/v1/query", (req, res) => {
         if (!isNaN(price)) {
             results = results.filter(product => product.price >= price);
         } else {
-            return res.status(400).json({ error: "Invalid price value" });
+            return res.status(400).json({ error: "Invalid minPrice value" });
         }
     }
 
