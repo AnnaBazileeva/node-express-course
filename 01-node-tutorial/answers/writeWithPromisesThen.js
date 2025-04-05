@@ -6,7 +6,7 @@ function writer() {
         .then(() => writeFile("./temp.txt", "Here is line 3\n", {flag: "a"}))
         .then(() => console.log("All lines written to temp.txt successfully."))
         .then(() => readFile("./temp.txt", "utf8"))
-        .then(() => console.log("Content:", data))
+        .then((data) => console.log("Content:", data))
         .catch((error) => {
             console.error("Error writing to file:", error);
         })
