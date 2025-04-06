@@ -70,14 +70,12 @@ app.get('/api/v1/query', (req, res) => {
     }
 
     if(limit) {
-        const limitNumber = parseInt(limit);
-        if (!isNaN(limitNumber) && limitNumber > 0) {
-            results = results.slice(0, limitNumber);
-        } else {
-            return res.status(400).json({ error: "Invalid limit value" });
-        }
+        results = results.slice(0, Number(limit))
     }
-    res.json(results)
+        if (results.length < 1) {
+           return res.status(200).json({success: true, data: []})
+        }
+        res.status(200).json(results);
 })
 
 app.all("*", (req, res) => {
