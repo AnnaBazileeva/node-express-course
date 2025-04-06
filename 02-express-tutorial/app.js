@@ -1,6 +1,15 @@
 const express = require("express");
-const { products } = require("./data");
 const app = express();
+const { products } = require("./data");
+
+
+app.get('/', (req, res) => {
+    res.send('<h1>Home page</h1><a href="/api/products">products</a>')
+})
+
+app.get(" ", (req, res) => {
+    res.send("About page")
+})
 
 app.use(express.static("./public/"));
 
@@ -9,23 +18,26 @@ app.get("/api/v1/test", (req, res) => {
 });
 
 app.get("/api/v1/products", (req, res) => {
-    res.json( products);
+    const newProducts = products.map((product)=>{
+        const {id, name, image} = product
+        return {id, name, image}
+    })
+    res.json( newProducts);
 });
 
 app.get('/api/v1/products/:productID', (req, res) => {
-    const idToFind = parseInt(req.params.productID);
-
-    if(isNaN(idToFind)) {
-        return res.status(400).json({error: "Product ID should be a number"})
-    }
-    const product = products.find((p) => p.id === idToFind);
+    const {productID} = req.params;
 
 
-    if (!product) {
+    const singleProduct = products.find((product) => product.id === Number(productID))
+    res.json(singleProduct)
+
+
+    if (!singleProduct) {
         return res.status(404).json({ error: "Product not found" });
     }
 
-    return res.json(product);
+    return res.json(singleProduct);
 });
 
 
