@@ -7,10 +7,6 @@ app.get('/', (req, res) => {
     res.send('<h1>Home page</h1><a href="/api/products">products</a>')
 })
 
-app.get(" ", (req, res) => {
-    res.send("About page")
-})
-
 app.use(express.static("./public/"));
 
 app.get("/api/v1/test", (req, res) => {
