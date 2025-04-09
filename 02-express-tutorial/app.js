@@ -1,35 +1,50 @@
 const express = require("express");
-const { products } = require("./data");
 const app = express();
+const { products } = require("./data");
+
+
+app.get('/', (req, res) => {
+    res.send('<h1>Home page</h1><a href="/api/products">products</a>')
+})
 
 app.use(express.static("./public/"));
+
 app.get("/api/v1/test", (req, res) => {
     res.json({ message: "It worked!" });
 });
 
 app.get("/api/v1/products", (req, res) => {
-    res.json( products);
+    const newProducts = products.map((product)=>{
+        const {id, name, image} = product
+        return {id, name, image}
+    })
+    res.json( newProducts);
 });
 
 app.get('/api/v1/products/:productID', (req, res) => {
-    const idToFind = parseInt(req.params.productID);
-    const product = products.find((p) => p.id === idToFind);
+    const {productID} = req.params;
 
 
-    if (!product) {
+    const singleProduct = products.find((product) => product.id === Number(productID))
+    res.json(singleProduct)
+
+
+    if (!singleProduct) {
         return res.status(404).json({ error: "Product not found" });
     }
 
-    res.json(product);
+    return res.json(singleProduct);
 });
 
+
 app.get('/api/v1/query', (req, res) => {
-    const {search, limit, price, maxPrice, minPrice} = req.query
+    const {search, limit, maxPrice, minPrice} = req.query
+
     let results = [...products]
 
     if(search) {
         results = results.filter(product => {
-            return product.name.toLowerCase().includes(search)
+            return product.name.toLowerCase().includes(search.toLowerCase());
         })
     }
 
@@ -38,7 +53,7 @@ app.get('/api/v1/query', (req, res) => {
         if (!isNaN(price)) {
             results = results.filter(product => product.price <= price);
         } else {
-            return res.status(400).json({ error: "Invalid price value" });
+            return res.status(400).json({ error: "Invalid maxPrice value" });
         }
     }
     if (minPrice) {
@@ -46,19 +61,17 @@ app.get('/api/v1/query', (req, res) => {
         if (!isNaN(price)) {
             results = results.filter(product => product.price >= price);
         } else {
-            return res.status(400).json({ error: "Invalid price value" });
+            return res.status(400).json({ error: "Invalid minPrice value" });
         }
     }
 
     if(limit) {
-        const limitNumber = parseInt(limit);
-        if (!isNaN(limitNumber) && limitNumber > 0) {
-            results = results.slice(0, limitNumber);
-        } else {
-            return res.status(400).json({ error: "Invalid limit value" });
-        }
+        results = results.slice(0, Number(limit))
     }
-    res.json(results)
+        if (results.length < 1) {
+           return res.status(200).json({success: true, data: []})
+        }
+        res.status(200).json(results);
 })
 
 app.all("*", (req, res) => {
