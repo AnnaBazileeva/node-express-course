@@ -1,4 +1,4 @@
-const  authorize = (res, req, next) => {
+const  authorize = ( req, res,  next) => {
     console.log('authorize')
     next()
 }
