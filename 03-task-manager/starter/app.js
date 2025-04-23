@@ -1,28 +1,28 @@
-const exprees = require('express')
-const app = exprees();
+const express = require('express')
+const app = express();
 
 app.get('/hello', (req,res)=> {
     res.send('Task manager')
 })
 
 app.get('/api/v1/tasks', (req,res)=> {
-    res.send('Task manager')
+    res.send('Get all tasks')
 })
 
 app.post('/api/v1/tasks', (req,res)=> {
-    res.send('Task manager')
+    res.send('Post task')
 })
 
 app.get('/api/v1/tasks/:id', (req,res)=> {
-    res.send('Task manager')
+    res.send('Get task by id')
 })
 
 app.patch('/api/v1/tasks/:id', (req,res)=> {
-    res.send('Task manager')
+    res.send('Update task')
 })
 
 app.delete('/api/v1/tasks/:id', (req,res)=> {
-    res.send('Task manager')
+    res.send('delete task')
 })
 
 const port =3000
