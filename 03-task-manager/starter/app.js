@@ -9,12 +9,6 @@ const port =3000
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-const logger = (req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    next();
-};
-app.use(logger);
-
 app.get('/', (req, res) => {
     res.send('Home Page');
 });
