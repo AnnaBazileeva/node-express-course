@@ -6,10 +6,24 @@ const connectDB = require("./db/connect");
 require('dotenv').config()
 
 const port =3000
-
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use('/api/v1/tasks', tasks);
 
+const logger = (req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+};
+app.use(logger);
+
+app.get('/', (req, res) => {
+    res.send('Home Page');
+});
+
+const peopleRouter = require('./routes/people');
+app.use('/api/v1/people', peopleRouter);
+
+
+app.use('/api/v1/tasks', tasks);
 
 const start = async ()=> {
     try {
