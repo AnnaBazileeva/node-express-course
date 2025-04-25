@@ -8,7 +8,7 @@ const errorHandler = require("./middleware/errorHandler");
 require("express-async-errors");
 const notFound = require("./middleware/notFound");
 
-const port = process.env.PORT ? process.env.PORT : 3000;
+const port =  process.env.PORT || 3000;
 
 app.use(express.static("./public"));
 app.use(express.urlencoded({ extended: false }));
