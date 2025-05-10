@@ -1,28 +1,24 @@
 const jwt = require('jsonwebtoken')
 const {BadRequest} = require('../errors')
 
-const login = async (req, res)=> {
-    const {username, password} = req.body
-    if(!username || !password ){
- throw new BadRequest('Please provide email  and password')
+const logon = async (req, res)=> {
+    const {name, password} = req.body
+    if(!name || !password ){
+ throw new BadRequest('Please provide name  and password')
     }
 
-    const id = new Date().getDate()
+    const token = jwt.sign({name}, process.env.JWT_SECRET, {expiresIn: '24h'})
 
-    const token = jwt.sign({id,username}, process.env.JWT_SECRET, {expiresIn: '30d'})
-
-    res.status(200).json({msg:'user created', token})
+    res.status(200).json({ token})
 }
 
-const dashboard = async (req, res) => {
-
-    const luckyNumber = Math.floor(Math.random() * 100)
+const hello = async (req, res) => {
     res.status(200).json({
-        msg: `Hello, ${req.user.username}`,
-        secret: `Here is your authorized data, you lucky number is ${luckyNumber}`
+        message: `Hello, ${req.user.name}! Welcome back.`,
     })
 }
 
+
 module.exports = {
-    login, dashboard
+    logon, hello
 }
