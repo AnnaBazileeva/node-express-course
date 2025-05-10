@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const CustomAPIError = require('../errors/custom-error')
 
 const login = async (req, res)=> {
@@ -10,12 +11,24 @@ const login = async (req, res)=> {
 
     const token = jwt.sign({id,username}, process.env.JWT_SECRET, {expiresIn: '30d'})
 
-    res.send(200).json({msg:'user created', token})
+    res.status(200).json({msg:'user created', token})
 }
 
 const dashboard = async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if(!authHeader || !authHeader.startsWith('Bearer')) {
+        throw new CustomAPIError('No token provided', 401)
+    }
+
+    const token = authHeader.split('')[1]
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    }catch (error) {
+throw new CustomAPIError('Not authorized to access this route', 401)
+    }
     const luckyNumber = Math.floor(Math.random()*100)
-    res.send(200).json({msg:`Hello, John`, secret: `Here is your authorized data, you lucky number is ${luckyNumber}`})
+    res.status(200).json({msg:`Hello, John`, secret: `Here is your authorized data, you lucky number is ${luckyNumber}`})
 }
 
 module.exports = {
