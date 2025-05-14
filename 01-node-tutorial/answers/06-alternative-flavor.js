@@ -1,1 +1,0 @@
-module.exports.programm = ["Intro", "JS" , "React" , "Node", "Ruby", "Python"]
